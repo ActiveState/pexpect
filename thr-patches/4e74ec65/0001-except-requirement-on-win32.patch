@@ -1,0 +1,48 @@
+From b9d7a31e64a5de6c467a60949b6e78f22d4fd231 Mon Sep 17 00:00:00 2001
+From: icanhasmath <marcg@activestate.com>
+Date: Thu, 1 Oct 2020 23:58:47 -0400
+Subject: [PATCH] except requirement on win32
+
+---
+ pexpect.egg-info/requires.txt | 2 +-
+ setup.py                      | 5 ++++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/pexpect.egg-info/requires.txt b/pexpect.egg-info/requires.txt
+index 13074f3..c322399 100644
+--- a/pexpect.egg-info/requires.txt
++++ b/pexpect.egg-info/requires.txt
+@@ -1 +1 @@
+-ptyprocess>=0.5
++ptyprocess>=0.5; sys_platform != 'win32'
+diff --git a/setup.py b/setup.py
+index 4e61e79..640daef 100644
+--- a/setup.py
++++ b/setup.py
+@@ -1,6 +1,7 @@
+ # encoding: utf-8
+ from distutils.core import setup
+ import os
++import platform
+ import re
+ import sys
+ 
+@@ -16,6 +17,8 @@ with open(os.path.join(os.path.dirname(__file__), 'pexpect', '__init__.py'), 'r'
+     else:
+         raise Exception("couldn't find version number")
+ 
++platform_requires = "ptyprocess>=0.5" if  platform.system() != "Windows" else ""
++
+ long_description = """
+ Pexpect is a pure Python module for spawning child applications; controlling
+ them; and responding to expected patterns in their output. Pexpect works like
+@@ -67,5 +70,5 @@ setup(name='pexpect',
+         'Topic :: System :: Software Distribution',
+         'Topic :: Terminals',
+     ],
+-    install_requires=['ptyprocess>=0.5'],
++    install_requires=[platform_requires] if platform_requires else [],
+ )
+-- 
+2.22.0
+
